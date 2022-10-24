@@ -1,11 +1,11 @@
-<h3>Getting Started with {{ include.cat }} or {{ page.category }}</h3>
+<h3>Getting Started with {{ page.category }}</h3>
 <ul>
-    {% for doc in site.documents %}
+    {% for p in site.pages %}
 
-    <li>{{ doc.category }}</li>
+    <li>{{ p.category }}</li>
 
-      {% if doc.category == include.cat %}
-        <li><a href="{{ doc.url }}">{{ doc.title }}</a></li>
+      {% if p.category == page.category %}
+        <li><a href="{{ p.url }}">{{ p.title }}</a></li>
       {% endif %}
     {% endfor %}
 </ul>
