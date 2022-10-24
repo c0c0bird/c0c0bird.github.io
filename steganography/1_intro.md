@@ -7,6 +7,6 @@ layout: default
 
 # {{ page.title }}
 
-{% include nav.html category=steganography %}
+{% include nav.html cat=steganography %}
 
 Text
