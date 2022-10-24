@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <body>
-     {{ content }}
-  </body>
+    <head>
+        <style>
+            li.active { font-weight: bold }
+
+            pre { background-color: #dddddd }
+        </style>
+    </head>
+    <body>
+        <div style="float: left; margin: 2em;">
+            {% include nav.html cat=page.category %}
+        </div>
+        {{ content }}
+    </body>
 </html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            li.active { font-weight: bold }
+
+            pre { background-color: #dddddd }
+        </style>
+    </head>
+    <body>
+        <div style="float: left; margin: 2em;">
+            <h3>Steganografie</h3>
+<ul>
+    
+      
+    
+      
+        <li class="">
+            <a href="/steganography_de/1_intro.html">Einstieg</a>
+        </li>
+      
+    
+      
+        <li class="active">
+            <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
+        </li>
+      
+    
+      
+        <li class="">
+            <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
+        </li>
+      
+    
+      
+        <li class="">
+            <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
+        </li>
+      
+    
+      
+        <li class="">
+            <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
+        </li>
+      
+    
+      
+        <li class="">
+            <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
+        </li>
+      
+    
+</ul>
+
+        </div>
+        <h1 id="mehrere-trägerbilder">Mehrere Trägerbilder</h1>
+
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet2_src.zip">C# Quellcode - 19.5 Kb</a></p>
+
+<h2 id="worum-geht-es">Worum geht es?</h2>
+
+<p>Dieser Artikel erweitert die Anwendung aus <a href="/steganography_de/1_intro.html">Teil 1</a>
+um das Aufteilen der Nachricht auf mehrere Träger-Bitmaps.</p>
+
+<h2 id="die-information-über-mehrere-bilder-verteilen">Die Information über mehrere Bilder verteilen</h2>
+
+<p>Wenn Du richtig paranoid bist, wirst Du Deiner Mailbox nicht vertrauen. Natürlich wirst Du auch
+nicht dem Briefträger vertrauen. Das bedeutet, dass Du es nicht wagst, die Träger-Bitmap in
+einem Stück zu verschicken.
+Das ist kein Problem mehr, denn Du kannst <i>eine</i> Nachricht in <i>mehreren</i> Bitmaps verstecken,
+als würde man einen Text über mehrere Seiten schreiben. Auf diese Anwendung bezogen heisst es,
+die Pixel über mehrere Bilder zu verteilen.</p>
+
+<p>So wie du einen Papierbrief zerschneiden und in mehrere hohle Baustämme stecken kannst…</p>
+
+<p><img src="/images/steganodotnet23.png" alt="multiple sheets of paper" /></p>
+
+<p>… kannst du die Bits in mehreren Grafiken verstecken:</p>
+
+<p><img src="/images/steganodotnet24.png" alt="multiple images" /></p>
+
+<p>Du kannst jedes Bild in einer separaten eMail verschicken, in verschiedenen Postfächern hinterlegen,
+oder auf verschiedenen Festplatten speichern.
+Die Oberfläche erlaubt es, mehrere Träger-Bitmaps genauso wie Schlüssel-Dateien auszuwählen.
+Die Auswahl wird in einem Array vom Typ <code>CarrierImage</code> gespeichert.</p>
+
+<pre>
+public struct CarrierImage{
+        //Name des "sauberen" Bildes
+        public String sourceFileName;
+        //Dateiname f&uuml;r das neue Bild
+        public String resultFileName;
+        //Breite * H&ouml;he
+        public long countPixels;
+        //Farbiges (false) oder monochromes (true) Rauschen in diesem Bild erzeugen
+        public bool useGrayscale;
+        //Anzahl der Bytes, die in diesem Bild versteckt werden - wird von HideOrExtract() gesetzt
+        public long messageBytesToHide;
+
+        public CarrierImage(String sourceFileName, String resultFileName, long countPixels, bool useGrayscale){
+                this.sourceFileName = sourceFileName;
+                this.resultFileName = resultFileName;
+                this.countPixels = countPixels;
+                this.useGrayscale = useGrayscale;
+                this.messageBytesToHide = 0;
+        }
+}
+</pre>
+
+<p>Größere Bilder können mehr Bytes (in mehr Pixeln) fassen als kleinere Bilder.
+Diese Beispiel-Anwendung verwendet die einfachste mögliche Verteilung:</p>
+
+<pre>
+//Anzahl der Bytes berechnen, f&uuml;r die dieses Bild verwendet wird
+for(int n=0; n&lt;imageFiles.Length; n++){
+        //pixels = Anzahl der Pixel im Bild / Anzahl verf&uuml;gbarer Pixel insgesamt
+        float pixels = (float)imageFiles[n].countPixels / (float)countPixels;
+        //Das Bild wird (L&auml;nge der Nachricht * pixels) Bytes verstecken
+        imageFiles[n].messageBytesToHide = (long)Math.Ceiling( (float)messageLength * pixels );
+}
+</pre>
+
+<p>Jetzt beginnen wir mit der ersten Träger-Bitmap, laufen durch die Nachricht, verstecken eine
+bestimmte Anzahl an Bytes, wechseln zur zweiten Träger-Bitmap, und immer so weiter.</p>
+
+<pre>
+//Aktuelle Position im Tr&auml;ger-Bitmap
+//Start bei 1, weil (0,0) die L&auml;nge der Nachricht enth&auml;lt
+Point pixelPosition = new Point(1,0);
+
+//Anzahl der Bytes, die in diesem Bild bereits versteckt wurden
+int countBytesInCurrentImage = 0;
+
+//Index des aktuell verwendeten Bildes
+int indexBitmaps = 0;
+
+//Nachricht durchlaufen und jedes Byte verstecken
+for(int messageIndex=0; messageIndex&lt;messageLength; messageIndex++){
+        //Position des n&auml;chsten Pixels berechnen
+        //...
+
+        //Weiter zur n&auml;chsten Bitmap
+        if(countBytesInCurrentImage == imageFiles[indexBitmaps].messageBytesToHide){
+                indexBitmaps++;
+                pixelPosition.Y = 0;
+                countBytesInCurrentImage = 0;
+                bitmapWidth = bitmaps[indexBitmaps].Width-1;
+                bitmapHeight = bitmaps[indexBitmaps].Height-1;
+                if(pixelPosition.X &gt; bitmapWidth){ pixelPosition.X = 0; }
+        }
+
+        //Ein Byte verstecken oder extrahieren
+        //...
+
+        countBytesInCurrentImage++;
+}
+</pre>
+
+<p>Zum Schluss müssen wir die neuen Bilder speichern. Jedes Bild kann in einem anderen Format
+gespeichert werden (bmp, tif oder png). Das neue Format hat nichts mit dem Format der Original-Datei zu tun.
+Das heisst, Du kannst eine BMP-, zwei PNG und eine TIFF-Datei als Träger-Bilder auswählen, und
+die Ergebnisse in drei TIFF- und einer PNG-Datei speichern.</p>
+
+<pre>
+//...
+        for(indexBitmaps=0; indexBitmaps&lt;bitmaps.Length; indexBitmaps++){
+                if( ! extract ){ //Extrations-Modus &auml;ndert keine Bilder
+                        //Entstandenes Bild speichern und Original schlie&szlig;en
+                        SaveBitmap( bitmaps[indexBitmaps], imageFiles[indexBitmaps].resultFileName );
+                }
+        }
+//...
+
+private static void SaveBitmap(Bitmap bitmap, String fileName){
+        String fileNameLower = fileName.ToLower();
+
+        //Format anhand der Erweiterung bestimmen
+        System.Drawing.Imaging.ImageFormat format = System.Drawing.Imaging.ImageFormat.Bmp;
+        if((fileNameLower.EndsWith("tif"))||(fileNameLower.EndsWith("tiff"))){
+                format = System.Drawing.Imaging.ImageFormat.Tiff;
+        }else if(fileNameLower.EndsWith("png")){
+                format = System.Drawing.Imaging.ImageFormat.Png;
+        }
+
+        //Bitmap kopieren
+        Image img = new Bitmap(bitmap);
+
+        //Datei schlie&szlig;en
+        bitmap.Dispose();
+        //Neue Bitmap speichern
+        img.Save(fileName, format);
+        img.Dispose();
+}
+</pre>
+
+
+    </body>
+</html>

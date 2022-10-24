@@ -1,11 +1,10 @@
-<h3>Getting Started with {{ page.category }}</h3>
+<h3>{{ page.category }}</h3>
 <ul>
     {% for p in site.pages %}
-
-    <li>{{ p.category }}</li>
-
       {% if p.category == page.category %}
-        <li><a href="{{ p.url }}">{{ p.title }}</a></li>
+        <li class="{% if p.url == page.url %}active{% endif %}">
+            <a href="{{ p.url }}">{{ p.title }}</a>
+        </li>
       {% endif %}
     {% endfor %}
 </ul>
