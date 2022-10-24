@@ -1,6 +1,9 @@
-<h3>Getting Started</h3>
+<h3>Getting Started with {{ include.category }}</h3>
 <ul>
-    {% for doc in site.docs %}
+    {% for doc in site.documents %}
+
+    <li>{{ doc.category }}</li>
+
       {% if doc.category == include.category %}
         <li><a href="{{ doc.url }}">{{ doc.title }}</a></li>
       {% endif %}
