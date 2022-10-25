@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div.nav { border: 1px solid #c0c0c0; padding: 0.25em }
+            div.nav h4 { margin: 1em 0 0.25em 0 }
+
+            li.active { font-weight: bold }
+
+            pre { background-color: #dddddd }
+
+            table.border { border: 1px solid black; border-collapse: collapse }
+            td.border { border: 1px solid black; border-collapse: collapse; padding: 0.25em }
+        </style>
+    </head>
+    <body>
+        <div style="float: left; margin: 2em;">
+            <div class="nav">
+    <h3>Steganografie</h3>
+    <ul>
+        
+        
+
+        
+          
+
+          
+            
+            <h4></h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/">Start</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Bilder</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/1_intro.html">Einstieg</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Audiodaten</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/7_midi.html">MIDI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/8_wave.html">Wave-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/9_analog.html">Analoge Musik-Cassetten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>.NET Assemblies / IL Code</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/10_net_assemblies.html">Vorbereitung</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/11_net_assemblies.html">Spaß auf dem Stack</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Listen</h4>
+          
+
+            <li class="active">
+                <a href="/steganography_de/12_lists.html">Listen ohne Mathe</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/13_lists.html">Listen effizient</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/14_lists.html">Musiknoten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Sonstiges</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/15_zip_archives.html">ZIP-Archive</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/16_framework.html">SteganoDotNet</a>
+            </li>
+          
+        
+    </ul>
+</div>
+
+        </div>
+        <h1 id="listen-ohne-mathe">Listen ohne Mathe</h1>
+
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet14_src.zip">C# Quellcode - 34.9 Kb</a></p>
+
+<h2 id="worum-geht-es">Worum geht es?</h2>
+
+<p>Was haben ein GIF-Bild, eine HTML-Seite, und ein Einkaufszettel gemeinsam?
+Sie alle sind oder enthalten Listen, die keine besondere Reihenfolge erfordern.
+die Farben in der Palette eines GIF-Bildes können jede Reihenoflge haben,
+so wie die Attribute in einem HTML-Tag, oder die Wörter auf deinem Einkaufszettel.</p>
+
+<p>In jeder Liste mit <code>anzahl</code> Elementen, können wir <code>anzahl-1</code> Bits verstecken,
+nur durch das Sortieren der Einträge. Keine Tricks, keine komplizierten Formeln.
+Fangen wir an mit einer einfache Liste von Wörtern,
+dann setzen wir das Prinzip fort mit GIF-Paletten und danach mit HTML-Seiten.
+The Algorithmus ist immer der gleiche, weil alle Listen im Grunde gleich sind.</p>
+
+<p>Der erste Schritt ist, die Listenelemente in eine bestimmte Reihenfolge zu zwingen.
+Diese kann alphabetisch sein, oder eine eigene Sortierung.
+Dann wird die sortierte Liste neu sortiert, abhängig von den Bits der geheimen Nachricht.</p>
+
+<p><img src="/images/listHide.png" width="552" height="446" style="background:#ffffff;" /></p>
+
+<p>Wenn du die Standard-Sortierung kennst, kannst du die Liste noch einmal sortieren, und die
+Stegano-Liste mit der sortierten Liste vergleichen.
+Die Unterschiede sagen dir alles über die Nachrichten-Bits, von denen die Reihenfolge stammte:</p>
+
+<p><img src="/images/listExtract.png" width="497" height="298" border="0" style="background:#ffffff;" /></p>
+
+<h2 id="zeile-für-zeile">Zeile für Zeile</h2>
+
+<p>Man braucht nicht unbedingt einen Computer für Listen-Steganografie.
+Such dir ein Stück Papier und einen Stift, und schreib neun Tiere auf.
+Nein, das ist nicht der Anfang eines Psychotests, es ist ein Trägerdokument.
+Die Wörter brauchen eine Standard-Sortierung, auf die wir uns bei der
+späteren Neu-Sortierung beziehen können, darum sortieren wir sie alphabetisch:</p>
+
+<div style="background:#ffffcc">
+<ol>
+    <li>Vogel</li>
+    <li>Katze</li>
+    <li>Dinosaurier</li>
+    <li>Hund</li>
+    <li>Fisch</li>
+    <li>Horse</li>
+    <li>Kaninchen</li>
+    <li>Schaf</li>
+    <li>Einhorn</li>
+</ol>
+</div>
+
+<p>Ohne mathematische Tricks können neun Listeneinträge 9-1 = 8 Bits an geheimer Information verstecken,
+zum Beispiel das ASCII-Zeichen ‘c’ (99 or 01100011).
+Jeder Eintrag (außer dem Letzten) repräsentiert ein Bit.
+Für jedes <i>1</i>-Bit verschieben wir das ersten Element aus der Original-Liste in die neue Liste,
+für <i>0</i>-Bits verschieben wir einen anderen Eitnrag in die neue Liste.
+Angefangen mit dem höchsten Bit, läuft der Prozess folgendermaßen ab:</p>
+
+<pre>
+Original-Liste        Neue Liste
+
+Vogel                 ---
+Katze                 ---
+Dinosaurier           ---
+Hund                  ---
+Fisch                 ---
+Horse                 ---
+Kaninchen             ---
+Schaf                 ---
+Einhorn               ---
+
+'0' Verstecken - Irgendein Element au&szlig;er dem Ersten verschieben
+
+Vogel                 Dinosaurier
+Katze                 ---
+---                   ---
+Hund                  ---
+Fisch                 ---
+Horse                 ---
+Kaninchen             ---
+Schaf                 ---
+Einhorn               ---
+
+
+'1' Verstecken - Erstes Element verschieben
+
+---                   Dinosaurier
+Katze                 Vogel
+---                   ---
+Hund                  ---
+Fisch                 ---
+Horse                 ---
+Kaninchen             ---
+Schaf                 ---
+Einhorn               ---
+
+'1' Verstecken - Erstes Element verschieben
+
+---                  Dinosaurier
+---                  Vogel
+---                  Katze
+Hund                 ---
+Fisch                ---
+Horse                ---
+Kaninchen            ---
+Schaf                ---
+Einhorn              ---
+
+'0' Verstecken - Irgendein Element au&szlig;er dem Ersten verschieben
+
+---                  Dinosaurier
+---                  Vogel
+---                  Katze
+Hund                  Kaninchen
+Fisch                 ---
+Horse                ---
+---                  ---
+Schaf                ---
+Einhorn              ---
+
+... ... und so weiter ... ...
+
+'1' Verstecken - Erstes Element verschieben
+
+---                  Dinosaurier
+---                  Vogel
+---                  Katze
+---                  Kaninchen
+---                  Einhorn
+---                  Fisch
+---                  Hund
+Schaf                Horse
+---                  ---
+
+Kein nicht-erster Element f&uuml;r ein '0'-Bit &uuml;brig,
+dass bedeutet keine Kapazit&auml;t f&uuml;r weitere Bits.
+Letzten Eintrag trotzdem verschieben.
+
+---                  Dinosaurier
+---                  Vogel
+---                  Katze
+---                  Kaninchen
+---                  Einhorn
+---                  Fisch
+---                  Hund
+---                  Horse
+---                  Schaf
+</pre>
+
+<p>Die neue Liste enthält die gleichen Einträge wie die alte,
+und einen zusätzlichen Sub-Inhalt, von den nur wir etwas wissen.
+Das versteckte Byte kann wieder gelesen werden, wenn wir den gleichen Prozess rückwärts durchspielen.</p>
+
+<pre>
+Sortierte Liste      Tr&auml;gerliste
+
+Vogel                Dinosaurier
+Katze                Vogel
+Dinosaurier          Katze
+Hund                 Kaninchen
+Fisch                Einhorn
+Horse                Fisch
+Kaninchen            Hund
+Schaf                Horse
+Einhorn              Schaf
+
+'Dinosaurier' ist nicht das erste Element der sortierten Liste, also war das versteckte Bit '0'.
+Notier dir das, und streich das Element aus beiden Listen.
+
+Vogel                ---
+Katze                Vogel
+---                  Katze
+Hund                 Kaninchen
+Fisch                Einhorn
+Horse                Fisch
+Kaninchen            Hund
+Schaf                Horse
+Einhorn              Schaf
+
+'Vogel' aus der Tr&auml;gerliste ist das erste Element in der sortierten Liste =&gt; '01'.
+
+---                  ---
+Katze                ---
+---                  Katze
+Hund                 Kaninchen
+Fisch                Einhorn
+Horse                Fisch
+Kaninchen            Hund
+Schaf                Horse
+Einhorn              Schaf
+
+'Katze' aus der Tr&auml;gerliste ist das erste Element in der sortierten Liste =&gt; '011'.
+
+---                  ---
+---                  ---
+---                  ---
+Hund                 Kaninchen
+Fisch                Einhorn
+Horse                Fisch
+Kaninchen            Hund
+Schaf                Horse
+Einhorn              Schaf
+
+'Dinosaurier' ist nicht das erste Element der sortierten Liste =&gt; '0110'.
+... ... und so weiter f&uuml;r alle Tiere ... ...
+</pre>
+
+<p>Das lateinische Alphabet ist keine gute Standard-Sortierung, denn jeder würde es gleich als Erstes ausprobieren.
+Mein Vorschlag: Misch dir Buchstaben durcheinander, und schreib dir ein benutzerdefiniertes Alphabet.
+Die Liste wie oben sortieren, können wir genausogut mit C#:</p>
+
+<pre>
+public StringCollection Hide(String[] lines, Stream message, String alphabet)
+{
+ //sort the lines according to a custom alphabet
+ StringCollection originalList = Utilities.SortLines(lines, alphabetFileName);
+ StringCollection resultList = new StringCollection();
+
+ int messageByte = message.ReadByte();
+ bool messageBit = false;
+ int listElementIndex = 0;
+ Random random = new Random();
+
+ //for each byte of the message
+ while (messageByte &gt; -1) {
+       //for each bit
+       for (int bitIndex=0; bitIndex&lt;8; bitIndex++) {
+
+           //decide which line is going to be the next one in the new list
+
+           messageBit = ((messageByte &amp; (1 &lt;&lt; bitIndex)) &gt; 0) ? true : false;
+
+           if (messageBit) {
+              //pick the first line from the remaining original list
+              listElementIndex = 0;
+           }else{
+              //pick any line but the first one
+              listElementIndex = random.Next(1, originalList.Count);
+           }
+
+           //move the line from old list to new list
+
+           resultList.Add(originalList[listElementIndex]);
+           originalList.RemoveAt(listElementIndex);
+       }
+
+       //repeat this with the next byte of the message
+       messageByte = message.ReadByte();
+ }
+
+ //copy unused list elements, if there are any
+ foreach (String s in originalList) {
+         resultList.Add(s);
+ }
+
+ return resultList;
+}
+</pre>
+
+<p>Mit einer Liste und einem Alphabet lässt sich der Prozess ganz einfach umkehren:</p>
+
+<pre>
+public Stream Extract(String[] lines, String alphabet)
+{
+ //initialize empty writer for the message
+ BinaryWriter messageWriter = new BinaryWriter(new MemoryStream());
+
+ StringCollection carrierList = new StringCollection();
+ carrierList.AddRange(lines);
+ carrierList.RemoveAt(carrierList.Count - 1);
+
+ //sort -&gt; get original list
+ StringCollection originalList = Utilities.SortLines(lines, alphabetFileName);
+ String[] unchangeableOriginalList = new String[originalList.Count];
+ originalList.CopyTo(unchangeableOriginalList, 0);
+
+ int messageBit = 0;
+ int messageBitIndex = 0;
+ int messageByte = 0;
+
+ foreach (String s in carrierList) {
+
+         //decide which bit the entry's position hides
+
+         if (s == originalList[0]) {
+            messageBit = 1;
+         }else{
+            messageBit = 0;
+         }
+
+         //remove the item from the sorted list
+         originalList.Remove(s);
+
+         //add the bit to the message
+         messageByte += (byte)(messageBit &lt;&lt; messageBitIndex);
+
+         messageBitIndex++;
+         if (messageBitIndex &gt; 7) {
+            //append the byte to the message
+            messageWriter.Write((byte)messageByte);
+            messageByte = 0;
+            messageBitIndex = 0;
+         }
+ }
+
+ //return message stream
+ messageWriter.Seek(0, SeekOrigin.Begin);
+ return messageWriter.BaseStream;
+}
+</pre>
+
+<h2 id="bunte-bits">Bunte Bits</h2>
+
+<p>Jede indizierte Bitmap enthält eine Liste, die sich auf die gleiche Weise missbrauchen lässt.
+Diese beiden Paletten gehören zum gleichen GIF-Bild. Eine ist das Original,
+die andere enthält einen versteckten Text von 31 Zeichen:</p>
+
+<p><img src="/images/paletteOriginal.png" width="266" height="266" /></p>
+
+<p><img src="/images/paletteNeu.png" width="267" height="266" /></p>
+
+<p>Wieder ist das Erste was wir brauchen eine Palette mit einer Standard-Sortierung.
+In diesem Beispiel werden wir die Farben nach ihren ARGB-Werten sortieren.</p>
+
+<pre>
+public Bitmap Hide(Bitmap image, Stream message)
+{
+ //list the palette entries an integer values
+ int[] colors = new int[image.Palette.Entries.Length];
+ for (int n = 0; n &lt; colors.Length; n++) {
+     colors[n] = image.Palette.Entries[n].ToArgb();
+ }
+
+ //initialize empty list for the resulting palette
+ ArrayList resultList = new ArrayList(colors.Length);
+
+ //initialize and fill list for the sorted palette
+ ArrayList originalList = new ArrayList(colors);
+ originalList.Sort();
+</pre>
+
+<p>Viele Pixel verweisen auf die Paletteneinträge, und die werden wir ebenfalls anpassen müssen.
+Also sollten wir, wenn wir eine Farbe in die neue Palette verschieben, alten und neuen Index notieren.</p>
+
+<pre>
+ //initialize list for the mapping of old indices to new indices
+ SortedList oldIndexToNewIndex = new SortedList(colors.Length);
+</pre>
+
+<p>Jetzt sind die Listen fertig, und wir können in die Nachricht eintauchen und
+für jedes Bit eine Farbe verschieben…</p>
+
+<pre>
+ Random random = new Random();
+ int listElementIndex = 0;
+ bool messageBit = false;
+ int messageByte = message.ReadByte();
+
+ //for each byte of the message
+ while (messageByte &gt; -1) {
+       //for each bit
+       for (int bitIndex = 0; bitIndex &lt; 8; bitIndex++) {
+
+           //decide which color is going to be the next one in the new palette
+
+           messageBit = ((messageByte &amp; (1 &lt; bitIndex)) &gt; 0) ? true : false;
+
+           if (messageBit) {
+              listElementIndex = 0;
+           }else{
+              listElementIndex = random.Next(1, originalList.Count);
+           }
+</pre>
+
+<p>…aber nicht vergessen, von welcher Position in der Original-Palette die Einträge kamen!
+Tausende Pixel warten auf aktualisierte Farbindizes.</p>
+
+<pre>
+           //log change of index for this color
+           int originalPaletteIndex = Array.IndexOf(colors, originalList[listElementIndex]);
+           if( ! oldIndexToNewIndex.ContainsKey(originalPaletteIndex)) {
+               //add mapping, ignore if the original palette contains more than one entry for this color
+               oldIndexToNewIndex.Add(originalPaletteIndex, resultList.Count);
+           }
+
+           //move the color from old palette to new palette
+           resultList.Add(originalList[listElementIndex]);
+           originalList.RemoveAt(listElementIndex);
+     }
+
+     //repeat this with the next byte of the message
+     messageByte = message.ReadByte();
+     }
+ //copy unused palette entries
+ foreach (object obj in originalList) {
+    int originalPaletteIndex = Array.IndexOf(colors, obj);
+    oldIndexToNewIndex.Add(originalPaletteIndex, resultList.Count);
+    resultList.Add(obj);
+ }
+
+ //create new image
+ Bitmap newImage = CreateBitmap(image, resultList, oldIndexToNewIndex);
+ return newImage;
+}
+</pre>
+
+<p>Die korrespondierende <code>Extract</code>-Methode änelt einer Kombination der
+<code>Hide</code>- und <code>Extract</code>-Methoden für Text-Listen.
+Sie sortiert die Palette, rekonstruiert die Nachricht, und entfernt dann die Nachricht aus dem Bild
+(produziert ein Bild mit einer Palette in Standard-Sortierung).
+Das hier ist die Palette aus dem Beispiel, nachdem die Nachricht ausgelesen und entfernt wurde:</p>
+
+<p><img src="/images/paletteSortiert.png" width="264" height="264" /></p>
+
+<h2 id="tags-voller-text-listen">Tags voller Text-Listen</h2>
+
+<p>Ein HTML-Document selbst ist keine sortierbare Liste, die Tags müssen in ihrer Reihenfolge bleiben.
+Aber innerhalb der Tags stehen Attribute, und diese können beliebig sortiert werden.
+Das heißt, jedes Tag einer HTML-Seite kann <code>Attributes.Count-1</code> Bits speichern.
+Die meisten Tags haben gerade genug Attribute für ein oder zwei Bits,
+aber wir können die Nachricht über alle Tags der Seite verteilen.</p>
+
+<p><img src="/images/htmlTag.gif" width="238" height="187" /></p>
+
+<pre>
+public void Hide(String sourceFileName, String destinationFileName, Stream message, String alphabet) {
+       //initializations skipped
+       // ... ... ...
+
+       //list the HTML tags
+       HtmlTagCollection tags = FindTags(htmlDocument);
+
+       //loop over tags
+       foreach (HtmlTag tag in tags) {
+
+       //write beginning of the tag
+       insertTextBuilder.Remove(0, insertTextBuilder.Length);
+       insertTextBuilder.AppendFormat("&lt;{0}", tag.Name);
+
+       //list attribute names
+       String[] attributeNames = new String[tag.Attributes.Count];
+       for (int n = 0; n &lt; attributeNames.Length; n++) {
+          attributeNames[n] = tag.Attributes[n].Name;
+       }
+</pre>
+
+<p>Ab hier ist der Code fast der gleiche wie in den anderen <code>Hide</code>-Methoden:</p>
+
+<pre>
+       //get default sorting
+       StringCollection originalList = Utilities.SortLines(attributeNames, alphabet);
+       StringCollection resultList = new StringCollection();
+
+       if (tag.Attributes.Count &gt; 1) {
+          //the tag has capacoty for one or more bits
+
+          for (int n = 0; n &lt; attributeNames.Length - 1; n++) {
+
+              //get next bit of the message
+
+              bitIndex++;
+              if (bitIndex == 8) {
+                 bitIndex = 0;
+                 if (messageByte &gt; -1) {
+                    messageByte = message.ReadByte();
+                 }
+              }
+
+              if (messageByte &gt; -1) {
+
+                 //decide which attribute is going to be the next one in the new tag
+
+                 messageBit = ((messageByte &amp; (1 &lt;&lt; bitIndex)) &gt; 0) ? true : false;
+
+                 if (messageBit) {
+                    listElementIndex = 0;
+                 }else{
+                    listElementIndex = random.Next(1, originalList.Count);
+                 }
+              }else{
+                 listElementIndex = 0;
+              }
+
+              //move the attribute from old list to new list
+              resultList.Add(originalList[listElementIndex]);
+              originalList.RemoveAt(listElementIndex);
+          }
+       }
+
+       if (originalList.Count &gt; 0) {
+          //add the last element - it never hides data
+          resultList.Add(originalList[0]);
+       }
+
+</pre>
+
+<p>Die sortierten Attribute müssen zuück ins Dokument geschrieben werden.
+Der größte Teil des Codes wurde aus dem letzten HTML-Artikel dieser Serie kopiert, und muss hier hoffentlich nicht extra erklärt werden. ;-)</p>
+
+<pre>
+       HtmlTag.HtmlAttribute attribute;
+       foreach (String attributeName in resultList) {
+              attribute = tag.Attributes.GetByName(attributeName);
+
+              insertTextBuilder.Append(" ");
+              if (attribute.Value.Length &gt; 0) {
+                 insertTextBuilder.AppendFormat("{0}={1}", attribute.Name, attribute.Value);
+              }else{
+                 insertTextBuilder.Append(attributeName);
+              }
+       }
+
+       //replace old tag with new tag
+       //.. ... ...
+}
+</pre>
+
+<p>Hast du bemerkt, dass die drei <code>Hide</code>-Methoden fast das gleiche tun?
+Die <code>Extract</code>-Methoden sind genauso ähnlich.
+Bitte lies sie im vollständigen Quelltext nach, falls du noch keine Bits-Allergie hast…</p>
+
+<h2 id="die-demo-anwendung">Die Demo-Anwendung</h2>
+
+<p><img src="/images/demo1.gif" width="298" height="190" /></p>
+
+<p>Die Anwendung besteht aus drei three "Halbduplex-Dialogen".
+Man kann entweder einen leeren Träger und eine Nachricht, oder einen Träger zum Auslesen einer Nachricht angeben.
+Bei Text-Listen und Bildern kann man das Ergebnis sofort sehen.</p>
+
+<p><img src="/images/demo2.png" width="610" height="414" /></p>
+
+<p>In den Dialogen für Text-Listen und HTML-Dokumente kann man eine "Alphabet-Datei" angeben.
+Das ist eine Textdatei mit einem benutzerdefinierten Alphabet.
+Ein beispielhaftes Alphabet findest du in <i>testdata/demo.txt</i>.</p>
+
+<p><img src="/images/demo3.png" width="610" height="360" /></p>
+
+
+    </body>
+</html>

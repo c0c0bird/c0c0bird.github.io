@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div.nav { border: 1px solid #c0c0c0; padding: 0.25em }
+            div.nav h4 { margin: 1em 0 0.25em 0 }
+
+            li.active { font-weight: bold }
+
+            pre { background-color: #dddddd }
+
+            table.border { border: 1px solid black; border-collapse: collapse }
+            td.border { border: 1px solid black; border-collapse: collapse; padding: 0.25em }
+        </style>
+    </head>
+    <body>
+        <div style="float: left; margin: 2em;">
+            <div class="nav">
+    <h3>Steganografie</h3>
+    <ul>
+        
+        
+
+        
+          
+
+          
+            
+            <h4></h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/">Start</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Bilder</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/1_intro.html">Einstieg</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Audiodaten</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/7_midi.html">MIDI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/8_wave.html">Wave-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="active">
+                <a href="/steganography_de/9_analog.html">Analoge Musik-Cassetten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>.NET Assemblies / IL Code</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/10_net_assemblies.html">Vorbereitung</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/11_net_assemblies.html">Spaß auf dem Stack</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Listen</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/12_lists.html">Listen ohne Mathe</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/13_lists.html">Listen effizient</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/14_lists.html">Musiknoten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Sonstiges</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/15_zip_archives.html">ZIP-Archive</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/16_framework.html">SteganoDotNet</a>
+            </li>
+          
+        
+    </ul>
+</div>
+
+        </div>
+        <h1 id="analoge-musik-cassetten">Analoge Musik-Cassetten</h1>
+
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet15_src.zip">C# Quellcode - 35.5 Kb</a></p>
+
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet15_src_and_sox.zip">C# Quellcode und SoX Binaries - 514 Kb</a></p>
+
+<h2 id="worum-geht-es">Worum geht es?</h2>
+
+<p><img src="/images/stations.jpg" width="600" /></p>
+
+<p>Digitale information ist verlustfrei. Man kann eine Datei von Festlpatte auf Floppy auf CD auf Flash Stick auf … kopieren
+und es wird nach wie vor die gleiche Datei sein.
+Aber wenn man analoge Medien verwendet, wie gutes altes Tape, kann man sich auf das Gegenteil verlassen:
+Die vom Medium gelesenen Daten werden definitiv anders sein, als das, was du vorher darauf geschrieben hast.</p>
+
+<p>Dennoch gibt es viele Arten, geheime Information in Klang auf einer Audio-Cassette zu verstecken.
+Eine recht einfache davon möchte ich dir erklären. Alles was du tun musst, bevor du es ausprobieren kannst,
+ist, einen alten Cassetten-Rekorder zu holen, den Mikrofon-Anschluss mit dem Kopfhörer-Anschluss (oder Line Out)
+deines Computers, und den Mikrofon-Anschluss (oder Line In) des Computers mit dem Kopfhörer-Anschluss des
+Rekorders zu verbinden.</p>
+
+<p>Dieser Artikel verwendet Code aus <a href="http://www.codeproject.com/cs/media/cswavrec.asp" target="_blank">A full-duplex audio player in C# using the waveIn/waveOut APIs</a>,
+und erfordert <a href="http://sox.sourceforge.net" target="_blank">Sound Exchange (SoX)</a>.</p>
+
+<h2 id="die-idee">Die Idee</h2>
+
+<p>Nachdem wir einen Klang auf eine Audio Cassette gespielt, und wieder in eine Wave-Datei zurück-aufgezeichnet haben, können
+wir uns nicht darauf verlassen, dass die binären Daten dieselben oder auch nur ähnlich sind.
+Darum reicht es nicht mehr aus, nur ein paar Bits zu ändern.
+Wir müssen den Klang so verändern, dass wir es wiedererkennen können, sogar hinter massenweise Rauschen und zufälligen Veränderungen.</p>
+
+<p>Deine erste Idee könnte sein, sehr kurze Piepser alle <i>n</i> Sekunden einzufügen, wobei <i>n</i> ein Byte der geheimen Nachricht ist.
+Der Empfänger kann die Töne mit einem Band-Pass-Filter isolieren, die Intervalle in einen Stream schreiben,
+und aus diesem einfach die Nachricht lesen. Aber wer das versucht, dem wird schnell das Band ausgehen:</p>
+
+<pre>A = 65
+B = 66
+C = 67
+ABC = 65 + 66 + 67 = 198</pre>
+
+<p>Wenn wir eine wiedererkennbare Frequenz in Intervallen, die für unsere Bytes stehen, einfügen würden,
+bräuchten wir 198 Sekunden allein für eine Kurznachricht wie <i>ABC</i>.</p>
+
+<p>Deine zweite Idee könnte sein, jedes geheime Byte in oberews und unteres Halbbyte zu teilen, so dass das maximale Intervall
+zwischen zwei Piepsern 15 beträgt, also kein Byte mehr als 30 Sekunden auf der Cassette belegt.
+Das Zeichen “z”, zum Beispiel, der mit dem ersten Versuch 122 Sekunden verbrauchen würde,
+braucht so nur noch 17 Sekunden:</p>
+
+<pre lang="text">z = <b>122</b> = 1111010
+half bytes = <b>7</b> (0111) and <b>10</b> (1010)</pre>
+<p><img height="80" src="/images/seconds.png" width="600" /></p>
+
+<p>Das ist genau das, was diese Anwendung macht. Sie ermöglicht es, die Träger-Wave nach einer unbenutzten oder relativ
+leisen Frequenz abzusuchen, und fügt extrem kurze, kaum hörbare Töne in genau dieser Frequenz ein.
+Man kann das Ergebnis abspielen, und mit dem Cassetten-Rekorder aufzeichnen.
+Um die so versteckte Nachricht auszulesen, spielt man einfach die Cassette ab, nimmt die Musik mit einem
+Audio Recorder-Programm auf (z.B. GoldWave etc.), und entfernt die Stille von Anfang und Ende.
+Danach kann man die Wave-Datei mit dieser Anwendung öffnen, die vorher zum Verstecken verwendete Frequenz eingeben,
+und zuschauen, während der Band-Pass-Filter die Piepser isoliert und die Nachricht rekonstruiert.</p>
+
+<h2 id="wie-es-funktioniert">Wie es funktioniert</h2>
+
+<h4>Verstecken einer Nachricht</h4>
+
+<p>Zum Verstecken einer Nachricht gehören fünf Schritte:</p>
+
+<ul>
+  <li>Eine Wave-Datei auswählen, und die Nachricht eingeben.</li>
+  <li>Prüfen, ob die Nachricht in den Sound hinein passt, notfalls kürzen.</li>
+  <li>Eine Frequenz raten, die nur in geringer Lautstärke oder gar nicht vorkommt.<br />
+       Falls “Check sound” eine Warnung ausgibt, die Schwellenlautstärke oder Frequenz erhöhen, bis die Warnung verschwindet.</li>
+  <li>Den neuen Sound schreiben.</li>
+  <li>Den neuen Sound abspielen und aufs Band aufzeichnen.</li>
+</ul>
+
+<p><img src="/images/screenHide.png" width="600" /></p>
+
+<p>Schritt drei und vier erklären sich nicht unbedingt von selbst.
+Fangen wir mit Schritt drei an: Eine Frequenz auf Existenz und Lautstärke prüfen.
+Der Benutzer rät eine Frequenz, und klickt auf “Check sound”.
+Um zu überprüfen, ob die höchste Amplitude einer solchen Frequenz niedriger als der ausgewählte Wert ist
+(was bedeutet, dass wir die gewählte Kombination verwenden können),
+müssen wir zuerst die Frequenz mit einem Band-Pass-Filter isolieren. SoX erledigt das für uns.
+Anschließend vergleichen wir die Samples des Ergebnisses mit der ausgewählten maximalen Amplitude
+(nennen wir es doch Lautstärke, in diesem Fall ist es fast das gleiche), und zählen die Samples, die zu laut sind.</p>
+
+<pre>//filter for frequency
+
+String outFileName = waveUtility.FindFrequency(
+       Path.GetTempPath(),
+       soxPath, //contains a path like C:\somewhere\sox.exe
+       (int)numFrequency.Value);
+
+//Let another utility read the result file
+
+WaveUtility filterUtility = new WaveUtility(outFileName);
+WaveSound waveSound = filterUtility.WaveSound;
+
+//filter for volume, check what is left of the sound
+
+long countLoudSamples = 0;
+short minVolumne = (short)(numHideVolume.Value - 100);
+short[] samples = waveSound.Samples;
+for (int n = 0; n &lt; samples.Length; n++) {
+    if (Math.Abs(samples[n]) &gt; minVolumne) {
+       countLoudSamples++;
+    }
+}
+
+if (countLoudSamples &gt; 0) {
+   MessageBox.Show(String.Format("The Frequency might be" +
+     " a bad choice, because there are already {0} " +
+     "too loud samples in the sound.", countLoudSamples));
+   errorProvider.SetError(numHideFrequency,
+     "Frequency not fitting, oder selected volume too low.");
+} else {
+   errorProvider.SetError(numHideFrequency, String.Empty);
+}</pre>
+
+<p>Fallses dich interessiert, wie <code>waveUtility.FindFrequency</code> arbeitet:
+Es kombiniert die Parameter zu einem String, ruft damit SoX auf, und liest die Fehlerausgabe (falls es Ärger gibt).</p>
+
+<pre>/// &lt;summary&gt;Let "Sound Exchange" perform a band pass filter on the sound&lt;/summary&gt;
+/// &lt;param name="tempDirectory"&gt;Path of the directory for temporary files&lt;/param&gt;
+/// &lt;param name="soxPath"&gt;Path and Name of sox.exe&lt;/param&gt;
+/// &lt;param name="frequency"&gt;Frequency that may pass the filter&lt;/param&gt;
+/// &lt;returns&gt;Path of the output file&lt;/returns&gt;
+public String FindFrequency(String tempDirectory, String soxPath, int frequency)
+{
+    String inFileName = Path.Combine(tempDirectory, "in.wav");
+    String outFileName = Path.Combine(tempDirectory, "out.wav");
+    int fileLength = this.WaveSound.SaveToFile(inFileName);
+
+    String soxArguments = String.Format(
+              "-t wav \"{0}\" -t .wav -c 1 -s -w \"{1}\" band {2} 10",
+              inFileName,
+              outFileName,
+              frequency);
+
+    RunSox(soxPath, soxArguments);
+    return outFileName;
+}
+
+/// &lt;summary&gt;Let "Sound Exchange" convert the sound&lt;/summary&gt;
+/// &lt;param name="soxPath"&gt;Path and Name of sox.exe&lt;/param&gt;
+/// &lt;param name="soxArguments"&gt;Arguments for sox.exe&lt;/param&gt;
+private void RunSox(String soxPath, String soxArguments)
+{
+    ProcessStartInfo startInfo = new ProcessStartInfo(
+                soxPath,
+                soxArguments);
+    startInfo.RedirectStandardError = true;
+    startInfo.UseShellExecute = false;
+    Process sox = Process.Start(startInfo);
+
+    StreamReader errorReader = sox.StandardError;
+    String errors = errorReader.ReadLine();
+    if (errors != null) {
+        throw new ApplicationException("sox failed: " + errors);
+    }
+
+    sox.WaitForExit(10000);
+}</pre>
+
+<p>Haben wir erst einmal eine Frequenz un Amplitude gefunden, die im Träger-Klang eindeutig sein wird,
+so dass sie nicht beim Extrahieren mit unschuldigen Samples verwechselt werden kann,
+können wir den geheimen Stream verstecken.</p>
+
+<pre>/// &lt;summary&gt;Hide a message in the wave&lt;/summary&gt;
+/// &lt;param name="message"&gt;Stream containing the message&lt;/param&gt;
+/// &lt;param name="frequencyHz"&gt;Frequency of the beeps,
+///        which will be inserted into the sound&lt;/param&gt;
+/// &lt;param name="volumne"&gt;Maximum sample value of the beeps&lt;/param&gt;
+public void Hide(Stream message, int frequencyHz, int volumne)
+{
+    Stream preparedMessage = PrepareMessage(message);
+    int messageByte;
+    int offset = 0;
+    while ((messageByte = preparedMessage.ReadByte()) &gt; -1) {
+        offset += messageByte;
+        InsertBeep(offset, frequencyHz, volumne);
+    }
+}</pre>
+
+<p>Dieses kurze Code-Stück ruft zwei wichtige Methoden auf, und zwar <code>PrepareMessage</code> und <code>InsertBeep</code>.
+<code>PrepareMessage</code> nimmt einen Stream mit der geheimen Nachricht an, und spaltet jedes Byte in zwei Halbbytes.
+Das Intervall zwischen zwei <i>Beeps</i> darf nicht Null Sekunden lang sein, aber viele Halbbytes werden Null sein,
+darum wird jeder Wert im vorbereiteten Stream <code>Halbbyte + 1</code> betragen.
+Später muss die Lesemethode 1 von jedem Intervall abziehen, so dass wir wieder die alten Halbbytes bekommen.</p>
+
+<pre>/// &lt;summary&gt;Split the bytes of a message into four-bit-blocks&lt;/summary&gt;
+/// &lt;param name="message"&gt;Stream containing the message&lt;/param&gt;
+/// &lt;returns&gt;Stream containing the same
+///        message with two bytes per original byte&lt;/returns&gt;
+private Stream PrepareMessage(Stream message)
+{
+    message.Position = 0;
+
+    MemoryStream preparedMessage = new MemoryStream();
+    int messageByte;
+    int highHalfByte;
+    int lowHalfByte;
+
+    while ((messageByte = message.ReadByte()) &gt; -1) {
+        //split into high and low part
+        highHalfByte = (messageByte &gt;&gt; 4);
+        lowHalfByte = (messageByte - (highHalfByte &lt;&lt; 4));
+
+        //intervals of 0 seconds are not possible -&gt; add 1 to all intervals
+        preparedMessage.WriteByte((byte)(highHalfByte + 1));
+        preparedMessage.WriteByte((byte)(lowHalfByte + 1));
+    }
+
+    preparedMessage.Position = 0;
+    return preparedMessage;
+}</pre>
+
+<p>Worauf warten wir noch? Wir haben den Sound, den vorbereitete Nachrichten-Stream, und eine benutzbare Frequenz.
+Das ist alles, was wir brauchen, um kleine Geräusche an speziellen Sekunden einzufügen, was die Aufgabe von
+<code>CreateBeep</code> und <code>InsertBeep</code> ist.</p>
+
+<pre>/// &lt;summary&gt;Creates sine sound of a specific frequency&lt;/summary&gt;
+/// &lt;param name="frequencyHz"&gt;Frequency in Hertz&lt;/param&gt;
+/// &lt;param name="volumne"&gt;Amplitude&lt;/param&gt;
+private WaveSound CreateBeep(int frequencyHz, int volumne)
+{
+    // samples for 1/32 seconds
+    short[] samples = new short[waveSound.Format.SamplesPerSec / 32];
+    double xValue = 0;
+    short yValue;
+
+    double xStep = (2 * Math.PI) / waveSound.Format.SamplesPerSec; // 1 Hz
+    xStep = xStep * frequencyHz;
+
+    for (int n = 0; n &lt; samples.Length; n++) {
+        xValue += xStep;
+        yValue = (short)(Math.Sin(xValue) * volumne);
+        samples[n] = yValue;
+    }
+
+    WaveSound beep = new WaveSound(waveSound.Format, samples);
+    return beep;
+}
+
+/// &lt;summary&gt;Replaces a part of the sound with a beep&lt;/summary&gt;
+/// &lt;param name="insertAtSecond"&gt;Where to put the beep&lt;/param&gt;
+/// &lt;param name="frequencyHz"&gt;Frequency of the beep in Hertz&lt;/param&gt;
+/// &lt;param name="volumne"&gt;Maximum sample value of the beep&lt;/param&gt;
+public void InsertBeep(float insertAtSecond, int frequencyHz, int volumne)
+{
+    short[] beepWave = CreateBeep(frequencyHz, volumne).Samples;
+    int insertAtSample = (int)(waveSound.Format.SamplesPerSec * insertAtSecond);
+    int longWaveIndex = insertAtSample;
+    for (int index = 0; index &lt; beepWave.Length; index++) {
+        waveSound[longWaveIndex] = beepWave[index];
+        longWaveIndex++;
+    }
+}</pre>
+
+<p>Wenn <code>Hide</code> die <code>while</code>-Schleife verlässt, wurde der gesamte Nachrichten-Stream
+in den Sound gepiept. Vorausgesetzt, man hat eine passende Frequenz und nicht zu hohe Amplitude eingestellt,
+ist die Veränderung kaum hörbar (andernfalls kann sie dem menschlichen Ohr zumindest wie gewöhnliche Störungen vorkommen).
+Mann kann das Ergebnis in eine <i>.wav</i>-Datei speichern, oder abspielen und ungespeichert aufnehmen.</p>
+
+<h4>Auslesen einer Nachricht</h4>
+
+<p>Vor dem Lesen einer versteckten Nachricht muss der Benutzer den Sound filtern.
+Falls der Cassetten-Spieler sehr schlimme Störungen in ausgerechnet unserer Frequenz hinzugefügt hat,
+so dass falsche Piepser erkannt werden, können diese Fehler aussortiert werden.</p>
+
+<ol>
+* Frequenz der erwarteten T&ouml;ne eingeben, und den Klang Band-Pass filtern.
+             Der zweite Filter-Button - threshold volume - ist nicht wirklich n&ouml;tig.
+             Man kann damit Sampels aus der Grafik entfernen, die ohnehin als Stille behandelt w&uuml;rden.
+* Die T&ouml;ne finden. Ein Piepser ist eine Gruppe von Samples, die gr&ouml;&szlig;er sind als die gew&auml;hlte Schwellenlautst&auml;rke.
+        In der Grafik werden Anfang und Ende jedes erkannten Piepsers mit roten Linien markiert.
+        Die CheckBoxes erm&ouml;glichen es, einzelne Piepser aus der Auswertugn auszuschlie&szlig;en,
+        wenn man sicher ist, dass sie nicht zur Nachricht geh&ouml;ren.
+* Die Nachricht lesen. Der letzte Schritt listet die Abst&auml;nde zwischen den ausgew&auml;hlten Ger&auml;suchen auf,
+        und rekonstruiert daraus die versteckte Nachricht.&lt;/LI&gt;
+</ol>
+
+<p><img height="444" src="/images/screenFind.png" width="600" /></p>
+
+<p>“Filter sound” wendet den gleichen Band-Pass-Filter an, den wir schon kennen.
+Diesmal zählen wir aber keine hohen Samples, sondern zeigen die gefilterte Wave an.</p>
+
+<pre>String outFileName = waveUtility.FindFrequency(
+        Path.GetTempPath(),
+        soxPath,
+        (int)numExtractFrequency.Value);
+
+waveControl.OpenFromFile(outFileName);</pre>
+
+<p>Jeder Ton ist 1/32 Sekunde lang. Das ist nicht ivel für menschliche Ohren, aber es sind eine Menge Samples.
+Die Sample-Gruppen werden durch Stille getrennt (dank Band-Pass-Filter und Schwellenlautstärke),
+daher können wir ein Scan-Fenster über die Samples schieben, und ein Stück Stille so definieren:
+<i>Alle Samples im aktuellen Zeitfenster liegen unterhalb der Schwelle</i>.
+Samples über der Schwelle werden als Teil desselben Tons behandelt, wenn keine Stille zwischen ihnen liegt.</p>
+
+<pre>/// &lt;summary&gt;Find anything but silence in the sound&lt;/summary&gt;
+/// &lt;remarks&gt;Raises the BeepFound event everytime a sound
+///      is detected between two blocks of silence&lt;/remarks&gt;
+/// &lt;param name="tolerance"&gt;
+/// Sample values greater than [tolerance] are sound,
+/// sample values less than [tolerance] are silence
+/// &lt;/param&gt;
+public void FindAnything(short tolerance) {
+    //size of scan window in samples
+    int scanWindowSize = waveSound.Format.SamplesPerSec / beepLength;
+    //size of scan window in seconds
+    float scanWindowSizeSeconds = (float)scanWindowSize /
+                (float)waveSound.Format.SamplesPerSec;
+
+    int startIndex = -1;
+    int endIndex = -1;
+    int countSilentSamples = 0;
+    for (int n = 0; n &lt; waveSound.Count; n++) {
+        if (Math.Abs(WaveSound[n]) &gt; tolerance) { //found a sound
+            countSilentSamples = 0;
+            if(startIndex &lt; 0){
+                startIndex = n;
+            }
+        } else if (startIndex &gt; -1) { //searched and found silence
+            countSilentSamples++;
+            if (countSilentSamples == scanWindowSize) {
+                endIndex = n - scanWindowSize;
+
+                //tell the caller to mark a found beep in the wave
+                NotifyOnBeep(startIndex, endIndex, scanWindowSizeSeconds);
+
+                //scan next time window
+                countSilentSamples = 0;
+                startIndex = -1;
+             }
+        }
+   }
+
+   if (startIndex &gt; -1) { //wave ends with a beep
+       NotifyOnBeep(startIndex, waveSound.Count-1, scanWindowSizeSeconds);
+   }
+}</pre>
+
+<p>Wenn der Benutzer schließlich auf “Read message” klickt, wurden alle Informationen bereits extrahiert,
+wir müssen nur noch die Halbbytes zusammensetzen.</p>
+
+<pre>private void btnExtract_Click(object sender, EventArgs e)
+{
+    //list the beginning seconds of the selected beeps
+    Collection&lt;Beep&gt; selectedItems = waveControl.SelectedItems;
+    Collection&lt;float&gt; startSeconds = new Collection&lt;float&gt;();
+    foreach (Beep beep in selectedItems) {
+        startSeconds.Add(beep.StartSecond);
+    }
+
+    //read the hidden message from the seconds
+    Stream messageStream = waveUtility.Extract(startSeconds);
+    StreamReader messageReader = new StreamReader(messageStream, Encoding.Default);
+    String message = messageReader.ReadToEnd();
+    messageReader.Close();
+
+    txtExtractMessage.Text = message;
+}</pre>
+
+<h2 id="klingt-nach-einem-beispiel-klang">Klingt nach einem Beispiel-Klang</h2>
+
+<p>Falls du gerade keine Wave-Dateien zur Hand hast, um mit der Anwendung zu spielen,
+fühl dich frei, diese Beispiel-Aufnahmen zu verwenden: <a href="/assets/demoWaves.zip">demoWaves.zip</a>.</p>
+
+<ul>
+  <li><i>101seconds.wav</i> - 101 Sekunden langer Original-Sound.</li>
+  <li><i>result_f2500_v2000.wav</i> - Der Sound inklusive “! C# RULES !”, versteckt mit 2500Hz und einer Amplitude von 2000.</li>
+  <li><i>record_f2500_v2000.wav</i> - Gespielt von dem Casseten-Spieler auf dem Foto, aufgezeichnet von meinem Notebook, via Kopfhörer/Mikrofon-Anschlüsse.
+     Versuch es ruhig, “! C# RULES !” kann immer noch problmlos extrahiert werden.</li>
+</ul>
+
+
+    </body>
+</html>

@@ -2,60 +2,269 @@
 <html>
     <head>
         <style>
+            div.nav { border: 1px solid #c0c0c0; padding: 0.25em }
+            div.nav h4 { margin: 1em 0 0.25em 0 }
+
             li.active { font-weight: bold }
 
             pre { background-color: #dddddd }
+
+            table.border { border: 1px solid black; border-collapse: collapse }
+            td.border { border: 1px solid black; border-collapse: collapse; padding: 0.25em }
         </style>
     </head>
     <body>
         <div style="float: left; margin: 2em;">
-            <h3>Steganografie</h3>
-<ul>
-    
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/1_intro.html">Einstieg</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
-        </li>
-      
-    
-      
-        <li class="active">
-            <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
-        </li>
-      
-    
-</ul>
+            <div class="nav">
+    <h3>Steganografie</h3>
+    <ul>
+        
+        
+
+        
+          
+
+          
+            
+            <h4></h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/">Start</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Bilder</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/1_intro.html">Einstieg</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="active">
+                <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Audiodaten</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/7_midi.html">MIDI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/8_wave.html">Wave-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/9_analog.html">Analoge Musik-Cassetten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>.NET Assemblies / IL Code</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/10_net_assemblies.html">Vorbereitung</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/11_net_assemblies.html">Spaß auf dem Stack</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Listen</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/12_lists.html">Listen ohne Mathe</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/13_lists.html">Listen effizient</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/14_lists.html">Musiknoten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Sonstiges</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/15_zip_archives.html">ZIP-Archive</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/16_framework.html">SteganoDotNet</a>
+            </li>
+          
+        
+    </ul>
+</div>
 
         </div>
         <h1 id="unsichtbare-änderungen">Unsichtbare Änderungen</h1>
 
-<p>Text</p>
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet3_src.zip">C# Quellcode - 20.7 Kb</a></p>
+
+<h2 id="worum-geht-es">Worum geht es?</h2>
+
+<p>Die Anwendung aus <a href="/steganography_de/2_multicarrier.html">Teil 2</a>
+fügt sichtbares Rauschen in die Träger-Bilder ein. In diesem Artikel
+werden die Bytes aufgeteilt und jedes Bit in einem anderen Pixel versteckt.
+Die versteckte Nachricht ist endlich unsichtbar, da nur das niedrigste Bit einer Farb-Komponente
+geändert wird.</p>
+
+<h2 id="ende-des-regenbogens">Ende des Regenbogens</h2>
+
+<p>Ein ganzes Byte einer RGB-Farbe zu ersetzen verursacht ein Regenbogen-Muster.
+So sieht ein weisses Bild (alle Pixel einfach nur weiss) aus, nachdem ein Text darin versteckt wurde:</p>
+
+<p><img src="/images/steganodotnet31.png" width="178" height="54" alt="typisches farbiges Rauschen" border="0" /></p>
+
+<p>Auf Farbfotos sind diese <i>Regenbogen-Pixel</i> vielleicht akzeptabel.
+Als monochromes Rauschen sieht die gleiche Nachricht im gleichen Bild so aus:</p>
+
+<p><img src="/images/steganodotnet32.png" width="178" height="54" alt="typisches graues Rauschen" border="0" /></p>
+
+<p>Wie man sieht wurden zu viele Bits der Pixel geändert.
+Jetzt werden wird jedes Byte über acht Pixel verteilen, so dass der <i>Regenbogen</i> verschwindet.</p>
+
+<h2 id="bits-lesen-und-setzen">Bits lesen und setzen</h2>
+
+<p><img src="/images/steganodotnet33.png" width="447" height="56" alt="Ein Byte &uuml;ber acht Pixel verteilen" border="0" /></p>
+
+<p>Für jedes Byte der Nachricht müssen wir</p>
+
+<ul>
+  <li>Ein Pixel holen</li>
+  <li>Das erste Bit des Nachrichten-Bytes holen</li>
+  <li>Eine Farb-Komponente des Pixels holen</li>
+  <li>Das erste Bit der Farb-Komponente holen</li>
+  <li>Wenn sich das Farb-Bit vom Nachrichten-Bit unterscheidet, es setzen/zurücksetzen</li>
+  <li>Das gleiche mit den anderen sieben Bits tun</li>
+</ul>
+
+<p>Die C#-Funktionen zum Lesen und Setzen einzelner Bits sind einfach:</p>
+
+<pre>
+private static bool GetBit(byte b, byte position){
+        return ((b &amp; (byte)(1 &lt;&lt; position)) != 0);
+}
+
+private static byte SetBit(byte b, byte position, bool newBitValue){
+        byte mask = (byte)(1 &lt;&lt; position);
+        if(newBitValue){
+                return (byte)(b | mask);
+        }else{
+                return (byte)(b &amp; ~mask);
+        }
+}
+</pre>
+
+<p>Der Rest des Codes hat sich kaum geändert. Verstecken funktioniert jetzt so…
+<img src="/images/steganodotnet34.gif" width="361" height="204" alt="Nachricht verstecken" border="0" /></p>
+
+<p>…und Extrahieren so:
+<img src="/images/steganodotnet35.gif" width="368" height="204" alt="Nachricht auslesen" border="0" /></p>
+
+<p>Das ist genug Text für diese Seite.
+Wenn Du mehr Details wissen möchtest, solltest Du den <a href="/assets/steganodotnet3_src.zip">Quellcode herunterladen</a>.</p>
+
 
     </body>
 </html>

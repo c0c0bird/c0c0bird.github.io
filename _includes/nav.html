@@ -1,10 +1,21 @@
-<h3>{{ page.category }}</h3>
-<ul>
-    {% for p in site.pages %}
-      {% if p.category == page.category %}
-        <li class="{% if p.url == page.url %}active{% endif %}">
-            <a href="{{ p.url }}">{{ p.title }}</a>
-        </li>
-      {% endif %}
-    {% endfor %}
-</ul>
+<div class="nav">
+    <h3>{{ page.category }}</h3>
+    <ul>
+        {% assign pagelist = site.pages | sort: 'order'  %}
+        {% assign subcategory = ''  %}
+
+        {% for p in pagelist %}
+          {% if p.category == page.category %}
+
+          {% if p.subcategory != subcategory %}
+            {% assign subcategory = p.subcategory  %}
+            <h4>{{ subcategory }}</h4>
+          {% endif %}
+
+            <li class="{% if p.url == page.url %}active{% endif %}">
+                <a href="{{ p.url }}">{{ p.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+    </ul>
+</div>

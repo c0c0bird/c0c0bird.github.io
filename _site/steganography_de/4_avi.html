@@ -2,60 +2,583 @@
 <html>
     <head>
         <style>
+            div.nav { border: 1px solid #c0c0c0; padding: 0.25em }
+            div.nav h4 { margin: 1em 0 0.25em 0 }
+
             li.active { font-weight: bold }
 
             pre { background-color: #dddddd }
+
+            table.border { border: 1px solid black; border-collapse: collapse }
+            td.border { border: 1px solid black; border-collapse: collapse; padding: 0.25em }
         </style>
     </head>
     <body>
         <div style="float: left; margin: 2em;">
-            <h3>Steganografie</h3>
-<ul>
-    
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/1_intro.html">Einstieg</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
-        </li>
-      
-    
-      
-        <li class="active">
-            <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
-        </li>
-      
-    
-      
-        <li class="">
-            <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
-        </li>
-      
-    
-</ul>
+            <div class="nav">
+    <h3>Steganografie</h3>
+    <ul>
+        
+        
+
+        
+          
+
+          
+            
+            <h4></h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/">Start</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Bilder</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/1_intro.html">Einstieg</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="active">
+                <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Audiodaten</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/7_midi.html">MIDI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/8_wave.html">Wave-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/9_analog.html">Analoge Musik-Cassetten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>.NET Assemblies / IL Code</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/10_net_assemblies.html">Vorbereitung</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/11_net_assemblies.html">Spaß auf dem Stack</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Listen</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/12_lists.html">Listen ohne Mathe</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/13_lists.html">Listen effizient</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/14_lists.html">Musiknoten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Sonstiges</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/15_zip_archives.html">ZIP-Archive</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/16_framework.html">SteganoDotNet</a>
+            </li>
+          
+        
+    </ul>
+</div>
 
         </div>
         <h1 id="avi-dateien">AVI-Dateien</h1>
 
-<p>Text</p>
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet4_src.zip">C# Quellcode - 27.2 Kb</a></p>
+
+<h2 id="worum-geht-es">Worum geht es?</h2>
+
+<p>Der Video Stream in einem AVI-Film ist nichts weiter als eine Folge von Bitmaps.
+In diesem Artikel geht es darum, diese Bitmaps zu extrahieren und den Stream anschließend wieder
+zusammen zu setzen, um auch im Video eine Nachricht verstecken zu können.
+<b>Falls Du schon weißt, wie man AVI-Videos bearbeitet, solltest Du diese Seite überspringen,
+es ist reine Zeitverschwendung.</b></p>
+
+<h2 id="den-video-stream-lesen">Den Video Stream lesen</h2>
+
+<p>Die Windows AVI Library ist ein Satz von Funktionen in avifil32.dll. Bevor der verwendet werden kann,
+muss er mit <code>AVIFileInit</code> initialisiert werden.
+<code>AVIFileOpen</code> öffnet eine Datei, <code>AVIFileGetStream</code> findet den
+Video Stream. Jede dieser Funktionen belegt Speicher, der am Ende wieder freigegeben werden muss.</p>
+
+<pre>
+//AVI Library initialisieren
+[DllImport("avifil32.dll")]
+public static extern void AVIFileInit();
+
+//Eine AVI Datei &ouml;ffnen
+[DllImport("avifil32.dll", PreserveSig=true)]
+public static extern int AVIFileOpen(
+        ref int ppfile,
+        String szFile,
+        int uMode,
+        int pclsidHandler);
+
+//einen Stream in einer offenen AVI Datei holen
+[DllImport("avifil32.dll")]
+public static extern int AVIFileGetStream(
+        int pfile,
+        out IntPtr ppavi,
+        int fccType,
+        int lParam);
+
+//Einen offenen AVI Stream freigeben
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamRelease(IntPtr aviStream);
+
+//Eine offene AVI Datei freigeben
+[DllImport("avifil32.dll")]
+public static extern int AVIFileRelease(int pfile);
+
+//AVI Library schlie&szlig;en
+[DllImport("avifil32.dll")]
+public static extern void AVIFileExit();
+</pre>
+
+<p>Jetzt können wir eine AVI Datei öffnen und den Video Stream finden.
+AVI Dateien enthalten mehrere Streams von vier verschiedenen Typen (Video, Audio, Midi und Text).
+Normalerweise existiert nur ein Stream von jedem Typ, und wir sind nur am Video Stream interessiert.</p>
+
+<pre>
+private int aviFile = 0;
+private IntPtr aviStream;
+
+public void Open(string fileName) {
+        AVIFileInit(); //Intitialize AVI library
+
+        //Datei &ouml;ffnen
+        int result = AVIFileOpen(
+                ref aviFile,
+                fileName,
+                OF_SHARE_DENY_WRITE, 0);
+
+        //Video Stream holen
+        result = AVIFileGetStream(
+                aviFile,
+                out aviStream,
+                streamtypeVIDEO, 0);
+}
+</pre>
+
+<p>Bevor wir die Frames auslesen können, müssen wir wissen, was genau wir lesen wollen:</p>
+<ul>
+  <li>Wo beginnt der erste Frame?</li>
+  <li>Wie viele Frames sind vorhanden?</li>
+  <li>Welche Höhe/Breite haben die Bilder?
+Die AVI Library enthält Funktionen für jede Frage.</li>
+</ul>
+
+<pre>
+//Startposition eines Streams ermitteln
+[DllImport("avifil32.dll", PreserveSig=true)]
+public static extern int AVIStreamStart(int pavi);
+
+//Anzahl der Frames in einem Stream ermitteln
+[DllImport("avifil32.dll", PreserveSig=true)]
+public static extern int AVIStreamLength(int pavi);
+
+//Header-Infos &uuml;ber einen offenen Stream abrufen
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamInfo(
+        int pAVIStream,
+        ref AVISTREAMINFO psi,
+        int lSize);
+</pre>
+
+<p>Mit diesen Funktionen können wir eine <code>BITMAPINFOHEADER</code> Struktur füllen.
+Um Bilder zu extrahieren, brauchen wir noch drei weitere Funktionen.</p>
+
+<pre>
+//Pointer auf ein GETFRAME Objekt holen (gibt bei Fehlern 0 zur&uuml;ck)
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamGetFrameOpen(
+        IntPtr pAVIStream,
+        ref BITMAPINFOHEADER bih);
+
+//Pointer auf ein DIB holen (gibt bei Fehlern 0 zur&uuml;ck)
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamGetFrame(
+        int pGetFrameObj,
+        int lPos);
+
+//GETFRAME Object freigeben
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamGetFrameClose(int pGetFrameObj);
+</pre>
+
+<p>Endlich können wir die Frames entpacken…</p>
+
+<pre>
+//Startposition und Anzahl der Frames holen
+int firstFrame = AVIStreamStart(aviStream.ToInt32());
+int countFrames = AVIStreamLength(aviStream.ToInt32());
+
+//Header-Inforamtionen holen
+AVISTREAMINFO streamInfo = new AVISTREAMINFO();
+result = AVIStreamInfo(aviStream.ToInt32(), ref streamInfo, Marshal.SizeOf(streamInfo));
+
+//Header f&uuml;r die Bitmaps zusammensetzen
+BITMAPINFOHEADER bih = new BITMAPINFOHEADER();
+bih.biBitCount = 24;
+bih.biCompression = 0;
+bih.biHeight = (Int32)streamInfo.rcFrame.bottom;
+bih.biWidth = (Int32)streamInfo.rcFrame.right;
+bih.biPlanes = 1;
+bih.biSize = (UInt32)Marshal.SizeOf(bih);
+
+//Entpacken von DIBs (device independend bitmaps) vorbereiten
+int getFrameObject = AVIStreamGetFrameOpen(aviStream, ref bih);
+
+...
+
+//Den Frame an einer bestimmten Position exportieren
+public void ExportBitmap(int position, String dstFileName){
+        //Frame dekomprimieren und Pointer zum DIB zur&uuml;ckgeben
+        int pDib = Avi.AVIStreamGetFrame(getFrameObject, firstFrame + position);
+
+        //Bitmap-Header in eine verwaltete Struktur kopieren
+        BITMAPINFOHEADER bih = new BITMAPINFOHEADER();
+        bih = (BITMAPINFOHEADER)Marshal.PtrToStructure(new IntPtr(pDib), bih.GetType());
+
+        //Das Bild kopieren
+        byte[] bitmapData = new byte[bih.biSizeImage];
+        int address = pDib + Marshal.SizeOf(bih);
+        for(int offset=0; offset&lt;bitmapData.Length; offset++){
+                bitmapData[offset] = Marshal.ReadByte(new IntPtr(address));
+                address++;
+        }
+
+        //Bitmap-Details kopieren
+        byte[] bitmapInfo = new byte[Marshal.SizeOf(bih)];
+        IntPtr ptr;
+        ptr = Marshal.AllocHGlobal(bitmapInfo.Length);
+        Marshal.StructureToPtr(bih, ptr, false);
+        address = ptr.ToInt32();
+        for(int offset=0; offset&lt;bitmapInfo.Length; offset++){
+                bitmapInfo[offset] = Marshal.ReadByte(new IntPtr(address));
+                address++;
+        }
+</pre>
+
+<p>…und in einer Bitmap-Datei speichern.</p>
+
+<pre>
+        //Header aufbauen
+        Avi.BITMAPFILEHEADER bfh = new Avi.BITMAPFILEHEADER();
+        bfh.bfType = Avi.BMP_MAGIC_COOKIE;
+        bfh.bfSize = (Int32)(55 + bih.biSizeImage); //Gr&ouml;&szlig;e der gespeicherten Datei
+        bfh.bfOffBits = Marshal.SizeOf(bih) + Marshal.SizeOf(bfh);
+
+        //Zieldatei erstellen oder &uuml;berschreiben
+        FileStream fs = new FileStream(dstFileName, System.IO.FileMode.Create);
+        BinaryWriter bw = new BinaryWriter(fs);
+
+        //Header schreiben
+        bw.Write(bfh.bfType);
+        bw.Write(bfh.bfSize);
+        bw.Write(bfh.bfReserved1);
+        bw.Write(bfh.bfReserved2);
+        bw.Write(bfh.bfOffBits);
+        //Details schreiben
+        bw.Write(bitmapInfo);
+        //Write bitmap data
+        bw.Write(bitmapData);
+        bw.Close();
+        fs.Close();
+} //end of ExportBitmap
+</pre>
+
+<p>Die Anwendung kann die extrahierten Bitmaps genauso verwenden wie jedes andere Bild.
+Wenn eine Träger-Datei ein AVI Video ist, wird der erste Frame in eine temporäre Datei extrahiert,
+geöffnet und ein Teil der Nachricht darin versteckt. Anschließend wird die geänderte Bitmap
+in einen neuen Stream geschrieben und mit dem nächsten Frame weiter gearbeitet.
+Nach dem letzten Frame schließt die Anwendung beide Video Dateien, löscht die temporären
+Bitmap Dateien, und macht mit der nächsten Träger-Datei weiter.</p>
+
+<h2 id="einen-video-stream-schreiben">Einen Video Stream schreiben</h2>
+
+<p>Wenn die Anwendung eine AVI Träger-Datei öffnet, erstellt sie auch eine weitere AVI Datei
+für die resultierenden Bitmaps.
+Der neue Video Stream muss die gleiche Höhe/Breite und Frame Rate haben wie das Original,
+darum können wir ihn nicht gleich in der <code>Open()</code> Methode anlegen.
+Wenn die erste Bitmap extrahiert wurde wissen wir das Format der Frames und können den Video Stream erstellen.
+Die Funktionen zum Anlegen von Streams und Hinzufügen von Frames sind
+<code>AVIFileCreateStream</code>, <code>AVIStreamSetFormat</code> und <code>AVIStreamWrite</code>:</p>
+
+<pre>
+//Neuen Strean in einer vorhandenen AVI Datei erstellen
+[DllImport("avifil32.dll")]
+public static extern int AVIFileCreateStream(
+        int pfile,
+        out IntPtr ppavi,
+        ref AVISTREAMINFO ptr_streaminfo);
+
+//Format eines neuen Stram festlegen
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamSetFormat(
+        IntPtr aviStream, Int32 lPos,
+        ref BITMAPINFOHEADER lpFormat, Int32 cbFormat);
+
+//Einen Frame in einen Stream schreiben
+[DllImport("avifil32.dll")]
+public static extern int AVIStreamWrite(
+        IntPtr aviStream, Int32 lStart, Int32 lSamples,
+        IntPtr lpBuffer, Int32 cbBuffer, Int32 dwFlags,
+        Int32 dummy1, Int32 dummy2);
+</pre>
+
+<p>Jetzt können wir einen Stream erstellen…</p>
+
+<pre>
+//Neuen Viedo Stream anlegen
+private void CreateStream() {
+        //Eigenschaften des Streams festlegen
+        AVISTREAMINFO strhdr = new AVISTREAMINFO();
+        strhdr.fccType = this.fccType; //mmioStringToFOURCC("vids", 0)
+        strhdr.fccHandler = this.fccHandler; //"Microsoft Video 1"
+        strhdr.dwScale = 1;
+        strhdr.dwRate = frameRate;
+        strhdr.dwSuggestedBufferSize = (UInt32)(height * stride);
+        //H&ouml;hste Qualit&auml;t verwenden! Kompression zerst&ouml;rt die versteckte Nachricht.
+        strhdr.dwQuality = 10000;
+        strhdr.rcFrame.bottom = (UInt32)height;
+        strhdr.rcFrame.right = (UInt32)width;
+        strhdr.szName = new UInt16[64];
+
+        //Den Stream erstellen
+        int result = AVIFileCreateStream(aviFile, out aviStream, ref strhdr);
+
+        //Format festlegen
+        BITMAPINFOHEADER bi = new BITMAPINFOHEADER();
+        bi.biSize      = (UInt32)Marshal.SizeOf(bi);
+        bi.biWidth     = (Int32)width;
+        bi.biHeight    = (Int32)height;
+        bi.biPlanes    = 1;
+        bi.biBitCount  = 24;
+        bi.biSizeImage = (UInt32)(this.stride * this.height);
+
+        //Format zuweisen
+        result = Avi.AVIStreamSetFormat(aviStream, 0, ref bi, Marshal.SizeOf(bi));
+}
+</pre>
+
+<p>…und Video Frames schreiben.</p>
+
+<pre>
+//Leere AVI Datei anlegen
+public void Open(string fileName, UInt32 frameRate) {
+        this.frameRate = frameRate;
+
+        Avi.AVIFileInit();
+
+        int hr = Avi.AVIFileOpen(
+                ref aviFile, fileName,
+                OF_WRITE | OF_CREATE, 0);
+}
+
+//Ein Bild zum Stream hinzuf&uuml;gen - wenn erstes Bild: Stream erstellen
+public void AddFrame(Bitmap bmp) {
+        BitmapData bmpDat = bmp.LockBits(
+                new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadOnly,PixelFormat.Format24bppRgb);
+
+        //Es ist der erste Frame - Gr&ouml;&szlig;e festlegen und Stream erstellen
+        if (this.countFrames == 0) {
+                this.stride = (UInt32)bmpDat.Stride;
+                this.width = bmp.Width;
+                this.height = bmp.Height;
+                CreateStream(); //a method to create a new video stream
+        }
+
+        //Bitmap hinzuf&uuml;gen
+        int result = AVIStreamWrite(aviStream,
+                countFrames, 1,
+                bmpDat.Scan0, //pointer to the beginning of the image data
+                (Int32) (stride  * height),
+                0, 0, 0);
+
+        bmp.UnlockBits(bmpDat);
+        this.countFrames ++;
+}
+</pre>
+
+<p>Mehr brauchen wir nicht, um Video Stream zu lesen und zu schreiben. Non-Video Streams und Kompression
+sind erstmal uninteressant, weil Kompression die versteckte Nachricht durch Farbveränderungen
+zerstören würde, und Sound die Dateien noch grösser machen würde - unkomprimierte
+AVI Dateien sind gross genug ;-)</p>
+
+<h2 id="änderungen-in-cryptutility">Änderungen in <code>CryptUtility</code></h2>
+
+<p>Die Methode <code>HideOrExtract()</code> hat bisher alle Träger-Bilder auf einmal geladen.
+Das war von Anfang an nicht gerade perfekt, und ist ab jetzt unbrauchbar, da alle AVIs entpackt werden müssten.
+Ab jetzt lädt <code>HideOrExtract()</code> nur eine Bitmap, und schließt sie wieder bevor das nächste
+Bild geladen wird. Das aktuell verwendete Träger-Bild - einfache Bitmap oder extrahierter AVI Frame -
+wird in einer <code>BitmapInfo</code> Struktur gespeichert.</p>
+
+<pre>
+public struct BitmapInfo{
+        //Unkomprimiertes Bild
+        public Bitmap bitmap;
+
+        //Position des Frames im AVI Stream, -1 f&uuml;r Non-AVI Bitmaps
+        public int aviPosition;
+        //Anzahl der Frames im AVI Stream,  0 f&uuml;r Non-AVI Bitmaps
+        public int aviCountFrames;
+
+        //Pfad und Name der Bitmap-Datei
+        //Diese Datei wird sp&auml;ter gel&ouml;scht, wenn aviPosition 0 oder gr&ouml;&szlig;er ist
+        public String sourceFileName;
+        //Anzahl der Bytes, die in diesem Bild versteckt werden
+        public long messageBytesToHide;
+
+        public void LoadBitmap(String fileName){
+                bitmap = new Bitmap(fileName);
+                sourceFileName = fileName;
+        }
+}
+</pre>
+
+<p>Jedesmal wenn <code>MovePixelPosition</code> die Position ins nächste Träger-Bitmap versetzt,
+prüft die Methode das Feld <code>aviPosition</code>. Wenn <code>aviPosition</code> &lt; 0 ist, wird
+die Bitmap gespeichert und geschlossen. Wenn <code>aviPosition</code> 0 oder größer, ist es ein
+Frame in einem AVI Stream. Dieser wird nicht in einer Datei gespeichert, sondern zum geöffneten AVI Stream hinzugefügt.
+Falls die Bitmap ein einfaches Bild oder der letzte Frame eines AVI Streams war, öffnet die Methode
+das nächste Träger-Bild. Gibt es weitere Frames im AVI Stream, wird die nächste Bitmap
+exportiert und geöffnet.</p>
+
+<h2 id="hinweise">Hinweise</h2>
+
+<p>Das Project enthält drei neue Klassen:</p>
+<ul>
+  <li><code>AviReader</code> öffnet AVI Dateien und kopiert Frames in Bitmap Dateien.</li>
+  <li><code>AviWriter</code> erstellt neue AVI Dateien und kombiniert Bitmaps zu einem Video Stream.</li>
+  <li><code>Avi</code> enthält alle Deklarationen und Struktur-Definitionen.</li>
+</ul>
+
+<h2 id="danke">Danke</h2>
+
+<p>Danke an <a href="http://www.shrinkwrapvb.com" target="_blank">Shrinkwrap Visual Basic</a>,
+        für das "Visual Basic AVIFile Tutorial", speziell für das Beispiel
+        zum kopieren von DIBs.</p>
+
+<p>Danke an Rene N., der eine <code>AviWriter</code>-Klasse in
+        <a href="news://microsoft.public.dotnet.languages.csharp">microsoft.public.dotnet.languages.csharp</a> gepostet hat.</p>
+
 
     </body>
 </html>

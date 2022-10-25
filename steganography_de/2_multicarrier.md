@@ -1,6 +1,7 @@
 ---
 title: Mehrere Trägerbilder
 category: Steganografie
+subcategory: Bilder
 order: 2
 layout: default
 ---

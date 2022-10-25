@@ -1,7 +1,8 @@
 ---
 title: Einstieg
 category: Steganografie
-order: 1
+subcategory: Bilder
+order: 001
 layout: default
 ---
 

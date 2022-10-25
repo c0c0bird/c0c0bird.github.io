@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div.nav { border: 1px solid #c0c0c0; padding: 0.25em }
+            div.nav h4 { margin: 1em 0 0.25em 0 }
+
+            li.active { font-weight: bold }
+
+            pre { background-color: #dddddd }
+
+            table.border { border: 1px solid black; border-collapse: collapse }
+            td.border { border: 1px solid black; border-collapse: collapse; padding: 0.25em }
+        </style>
+    </head>
+    <body>
+        <div style="float: left; margin: 2em;">
+            <div class="nav">
+    <h3>Steganografie</h3>
+    <ul>
+        
+        
+
+        
+          
+
+          
+            
+            <h4></h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/">Start</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Bilder</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/1_intro.html">Einstieg</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/2_multicarrier.html">Mehrere Trägerbilder</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/3_invisible_changes.html">Unsichtbare Änderungen</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/4_avi.html">AVI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/5_density.html">Bereiche mit unterschiedlicher Datendichte</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/6_indexed.html">Paletten-Bitmaps wie GIF oder PNG</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Audiodaten</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/7_midi.html">MIDI-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="active">
+                <a href="/steganography_de/8_wave.html">Wave-Dateien</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/9_analog.html">Analoge Musik-Cassetten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>.NET Assemblies / IL Code</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/10_net_assemblies.html">Vorbereitung</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/11_net_assemblies.html">Spaß auf dem Stack</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Listen</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/12_lists.html">Listen ohne Mathe</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/13_lists.html">Listen effizient</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/14_lists.html">Musiknoten</a>
+            </li>
+          
+        
+          
+
+          
+            
+            <h4>Sonstiges</h4>
+          
+
+            <li class="">
+                <a href="/steganography_de/15_zip_archives.html">ZIP-Archive</a>
+            </li>
+          
+        
+          
+
+          
+
+            <li class="">
+                <a href="/steganography_de/16_framework.html">SteganoDotNet</a>
+            </li>
+          
+        
+    </ul>
+</div>
+
+        </div>
+        <h1 id="wave-dateien">Wave-Dateien</h1>
+
+<p><img src="/images/save.gif" width="14" height="14" alt="" border="0" /> <a href="/assets/steganodotnet8_src.zip">C# Quellcode - 20.8 Kb</a></p>
+
+<h2 id="worum-geht-es">Worum geht es?</h2>
+
+<p>Nachdem wir nun in Bitmaps, MIDI Tracks und .NET Assemblies Daten versteckt haben,
+vermisst Du vielleicht ein wichtiges Dateiformat. Vielleicht vermisst Du die Dateien,
+die sehr viele Bytes verstecken können, ohne größer zu werden, und sich
+in wenigen Sekunden erstellt lassen, so dass man keine Originaldateien auf der Festplatte
+speichern muss. Es ist an der Zeit, Wave Audio zur Liste hinzuzufügen.</p>
+
+<p>Dieser Artikel verwendet Code aus
+<a href="http://www.codeproject.com/cs/media/cswavrec.asp" target="_blank">A full-duplex audio player in C# using the waveIn/waveOut APIs</a>.</p>
+
+<h2 id="das-wave-dateiformat">Das Wave Dateiformat</h2>
+
+<p>Hast Du schon einmal eine Wave Date im HEX Editor angeschaut?
+Sie beginnt so, und geht mit unlesbaren Binärdaten weiter:</p>
+
+<p><img src="/images/steganodotnet86.gif" width="523" height="35" /></p>
+
+<p>Jede RIFF Datei beginnt mit dem Text "RIFF", gefolgt von der
+<code>Int32</code> Länge der gesamten Datei:</p>
+
+<p><img src="/images/steganodotnet81.gif" width="184" height="36" /></p>
+
+<p>Die nächsten Felder sagen, dass diese RIFF Datei Wave-Daten enthält, und öffnen den Format-Chunk:</p>
+
+<p><img src="/images/steganodotnet82.gif" width="184" height="35" /></p>
+
+<p>Die Länge des folgenden Format-Chunks muss für PCM Dateien 16 sein:</p>
+
+<p><img src="/images/steganodotnet83.gif" width="140" height="35" /></p>
+
+<p>Jetzt wird mit einer <code>WAVEFORMATEX</code> Struktur das Format angegeben:</p>
+
+<p><img src="/images/steganodotnet84.gif" width="356" height="83" /></p>
+
+<p>Nach dem Format-Chunk können noch Extra-Informationen stehen.
+Der interessante Teil beginnt mit dem <code>data</code> Chunk.</p>
+
+<p><img src="/images/steganodotnet85.gif" width="198" height="38" /></p>
+
+<p>Der Daten-Chunk enthält alle Wave Samples. Dass heißt, der Rest der Datei
+besteht aus reinen Audio-Daten. Kleine Änderungen können eventuell hörbar sein,
+aber nicht die Datei zerstören.</p>
+
+<h2 id="die-nachricht-verstecken">Die Nachricht verstecken</h2>
+
+<p>Eine Nachricht in Wave Samples zu verstecken funktioniert fast genauso wie in den Pixeln
+einer Bitmap. Wieder verwenden wir einen Schlüssel-Stream, um eine Anzahl von Trägereinheiten
+(Samples/Pixel) zu überspringen, greifen eine Trägereinheit heraus, setzen ein Bit der
+Nachricht in ihr niedrigstes Bit, und schreiben die geänderte Einheit in den Ziel-Stream.
+Nachdem die ganze Nachricht so versteckt wurde, kopieren wir den Rest des Träger-Streams.</p>
+
+<pre>
+public void Hide(Stream messageStream, Stream keyStream){
+
+        byte[] waveBuffer = new byte[bytesPerSample];
+        byte message, bit, waveByte;
+        int messageBuffer; //receives the next byte of the message or -1
+        int keyByte; //distance of the next carrier sample
+
+        //Schleife &uuml;ber die Nachricht, jedes Byte verstecken
+        while( (messageBuffer=messageStream.ReadByte()) &gt;= 0 ){
+                //read one byte of the message stream
+                message = (byte)messageBuffer;
+
+                //f&uuml;r jedes Bit in [message]
+                for(int bitIndex=0; bitIndex&lt;8; bitIndex++){
+
+                        //ein Byte vom Schl&uuml;ssel-Stream lesen
+                        keyByte = GetKeyValue(keyStream);
+
+                        //[keyByte] Samples &uuml;berspringen
+                        for(int n=0; n&lt;keyByte-1; n++){
+                                //ein Sample aus dem sauberen Stream in den Tr&auml;ger-Stream kopieren
+                                sourceStream.Copy(
+                                        waveBuffer, 0,
+                                        waveBuffer.Length, destinationStream);
+                        }
+
+                        //ein Sample aus dem Wave-Stream lesen
+                        sourceStream.Read(waveBuffer, 0, waveBuffer.Length);
+                        waveByte = waveBuffer[bytesPerSample-1];
+
+                        //n&auml;chstes Bit des aktuellen Nachrichten-Bytes holen...
+                        bit = (byte)(((message &amp; (byte)(1 &lt;&lt; bitIndex)) &gt; 0) ? 1 : 0);
+
+                        //...und ins letzte Bit des Samples schreiben
+                        if((bit == 1) &amp;&amp; ((waveByte % 2) == 0)){
+                                waveByte += 1;
+                        }else if((bit == 0) &amp;&amp; ((waveByte % 2) == 1)){
+                                waveByte -= 1;
+                        }
+
+                        waveBuffer[bytesPerSample-1] = waveByte;
+
+                        //Ergebnis in den Ziel-Stream schreiben
+                        destinationStream.Write(waveBuffer, 0, bytesPerSample);
+                }
+        }
+
+        //Rest der Wave unver&auml;ndert kopieren
+        //...
+}
+</pre>
+
+<h2 id="die-nachricht-auslesen">Die Nachricht auslesen</h2>
+
+<p>Wieder verwenden wir den Schlüssel-Stream, um die richtigen Samples zu finden, genauso wie
+vorher beim Verstecken der Nachricht.
+Dann lesen wir das letzte Bit des jeweiligen Samples und schieben es ins aktuelle Byte der Nachricht.
+Wenn das Byte vollständig ist, schreiben wir es in den Nachrichten-Stream, und machen
+mit dem Nächsten weiter.</p>
+
+<pre lang="cs">
+public void Extract(Stream messageStream, Stream keyStream){
+
+        byte[] waveBuffer = new byte[bytesPerSample];
+        byte message, bit, waveByte;
+        int messageLength = 0; //expected length of the message
+        int keyByte; //distance of the next carrier sample
+
+        while( (messageLength==0 || messageStream.Length&lt;messageLength) ){
+                //Nachrichten-Byte zur&uuml;cksetzen
+                message = 0;
+
+                //f&uuml;r jedes Bit in [message]
+                for(int bitIndex=0; bitIndex&lt;8; bitIndex++){
+
+                        //ein Byte vom Schl&uuml;ssel-Stream lesen
+                        keyByte = GetKeyValue(keyStream);
+
+                        //[keyByte] Samples auslassen
+                        for(int n=0; n&lt;keyByte; n++){
+                                //ein Sample aus dem Wave-Stream lesen
+                                sourceStream.Read(waveBuffer, 0, waveBuffer.Length);
+                        }
+                        waveByte = waveBuffer[bytesPerSample-1];
+
+                        //letztes Bit des Samples holen...
+                        bit = (byte)(((waveByte % 2) == 0) ? 0 : 1);
+
+                        //...und ins Nachrichten-Byte schreiben
+                        message += (byte)(bit &lt;&lt; bitIndex);
+                }
+
+                //rekonstruiertes Byte zur Nachricht hinzuf&uuml;gen
+                messageStream.WriteByte(message);
+
+                if(messageLength==0 &amp;&amp; messageStream.Length==4){
+                        //die ersten 4 Bytes enthalten die L&auml;nge der Nachricht
+                        //...
+                }
+        }
+}
+</pre>
+
+<h2 id="einen-klang-aufzeichnen">Einen Klang aufzeichnen</h2>
+
+<p>Die originalen, sauberen Trägerdateien aufzuheben, kann gefährlich sein.
+Jemand der eine Trägerdatei mit geheimer Nachricht darin hat, und es schafft, die
+Original-Datei ohne Nachricht zu bekommen, kann einfach die beiden Dateien vergleichen,
+die Abstände zwischen jeweils zwei unterschiedlichen Samples zählen,
+und so schnell den Schlüssel rekonstruieren.</p>
+
+<p>Deshalb müssen wir die sauberen Trägerdateien löschen und zerstören nachdem
+sie einmal verwendet wurden, oder einen Sound <i>on the fly</i> aufzeichnen.
+Dank
+<a href="http://www.codeproject.com/cs/media/cswavrec.asp" target="_blank">Ianier Munoz’ WaveInRecorder</a>
+ist es kein Problem, Wave-Daten aufzunehmen und eine Nachricht darin zu verstecken, bevor irgendetwas
+auf der Festplatte gespeichert wird. Es gibt keine Original-Datei, um die wir uns Sorgen machen müssten.
+Im Hauptformular kann der Benutzer wählen, ob er eine vorhandene Wave-Datei verwenden, oder hier und jetzt
+einen Sound aufzeichnen möchte.
+Wenn er einen einzigartigen, nicht reproduzierbaren Sound aufnehmen will, kann er ein Mikrofon
+anschließen und sprechen/spielen/… was immer ihm einfällt:</p>
+
+<pre>
+if(rdoSrcFile.Checked){
+        //eine .wav Datei als Tr&auml;ger verwenden
+        //beschwer dich nachher nicht, du wurdest schlie&szlig;lich gewarnt
+        sourceStream = new FileStream(txtSrcFile.Text, FileMode.Open);
+}else{
+        //einen Tr&auml;ger-Klang aufzeichnen
+        frmRecorder recorder = new frmRecorder(countSamplesRequired);
+        recorder.ShowDialog(this);
+        sourceStream = recorder.RecordedStream;
+}
+</pre>
+
+<p><code>frmRecorder</code> ist eine kleine Oberfläche für den WaveIn Recorder,
+die die aufgenommenen Samples mitzählt und einen Stop-Button aktiviert, sobald der
+Sound lang genug ist um die angegebene Nachricht zu verstecken.</p>
+
+<p><img src="/images/steganodotnet87.png" width="314" height="116" /></p>
+
+<p>Der neue Sound wird in einem <code>MemoryStream</code> abgelegt und an
+<code>WaveUtility</code> weitergereicht. Von da an ist es egal, wo der Stream her kam,
+<code>WaveUtility</code> macht keinen Unterschied zwischen aus Dateien gelesenen und <i>on the fly</i>
+aufgezeichneten Klängen.</p>
+
+<pre>
+WaveUtility utility = new WaveUtility(sourceStream, destinationStream);
+utility.Hide(messageStream, keyStream);
+</pre>
+
+
+    </body>
+</html>
