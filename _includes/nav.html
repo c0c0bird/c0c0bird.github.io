@@ -1,11 +1,11 @@
 <div class="nav">
-    <h3>{{ page.category }}</h3>
+    <h3>{{ include.cat }}</h3>
     <ul>
         {% assign pagelist = site.pages | sort: 'order'  %}
         {% assign subcategory = ''  %}
 
         {% for p in pagelist %}
-          {% if p.category == page.category %}
+          {% if p.category == include.cat %}
 
           {% if p.subcategory != subcategory %}
             {% assign subcategory = p.subcategory  %}

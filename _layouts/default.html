@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            div.nav { border: 1px solid #c0c0c0; padding: 0.25em }
-            div.nav h4 { margin: 1em 0 0.25em 0 }
-
-            li.active { font-weight: bold }
-
-            pre { background-color: #dddddd }
-
-            table.border { border: 1px solid black; border-collapse: collapse }
-            td.border { border: 1px solid black; border-collapse: collapse; padding: 0.25em }
-        </style>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <link rel="STYLESHEET" type="text/css" href="/default.css">
     </head>
     <body>
         <div style="float: left; margin: 2em;">
+            {% if page.category != 'Index' %}
+                {% include nav.html cat='Index' %}
+            {% endif %}
+
             {% include nav.html cat=page.category %}
         </div>
         {{ content }}

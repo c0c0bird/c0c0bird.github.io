@@ -1,0 +1,12 @@
+<div class="nav">
+    <h3>Bastelblog</h3>
+    <ul>
+        {% assign pagelist = site.posts reversed %}
+
+        {% for p in pagelist %}
+            <li class="{% if p.url == page.url %}active{% endif %}">
+                <a href="{{ p.url }}">{{ p.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
